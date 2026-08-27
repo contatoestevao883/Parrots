@@ -39,27 +39,19 @@ function duplicateCard(){
     duplicatedCards = [...arrayOfCards, ...arrayOfCards]
 
 }
-duplicateCard()
 
-function generateCards(){
-    const main = document.querySelector("main")
-    for(let i = 0;  i < duplicatedCards.length; i++){
-        main.innerHTML += `
-            <div>
-                <div class="card" onclick="clickedItem(this)">
-                    <div class="front-face face">
-                        <img src="/img/back.png">
-                    </div>
+function duplicateCard(){
 
-                    <div class="back-face face" >
-                        <img src="${duplicatedCards[i]}">
-                    </div>
-                </div>
-            </div>
-        `
+    let newArray = numberOfCards / 2
+
+    for(let i = 0; i < newArray; i++){
+        arrayOfCards.push(images[i])
     }
+
+    duplicatedCards = [...arrayOfCards, ...arrayOfCards]
+
+    duplicatedCards.sort(comparador)
 }
-generateCards()
 
 function comparador() { 
 	return Math.random() - 0.5;
@@ -136,9 +128,15 @@ function flipOver(){
 
 function invalidNumberOfCards(){
     
-    if ( numberOfCards % 2 === 1 || numberOfCards < 4 || numberOfCards > 14 || isNaN(numberOfCards) ){
+    if (
+        numberOfCards % 2 === 1 ||
+        numberOfCards < 4 ||
+        numberOfCards > 12 ||
+        isNaN(numberOfCards)
+    ){
         return true;
     }
+
     return false;
 }
 
