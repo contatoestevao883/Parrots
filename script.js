@@ -51,7 +51,7 @@ function duplicateCard(){
     duplicatedCards = [...arrayOfCards, ...arrayOfCards]
 
     duplicatedCards.sort(comparador)
-}
+}   
 
 function comparador() { 
 	return Math.random() - 0.5;
@@ -87,6 +87,46 @@ function clickedItem(itemClicked){
             setTimeout(flipOver, 1000)
 
         }
+    }
+}
+
+function generateCards(){
+
+    const main = document.querySelector("main")
+
+    for(let i = 0; i < duplicatedCards.length; i++){
+
+        const cardContainer = document.createElement("div")
+
+        const card = document.createElement("div")
+        card.classList.add("card")
+
+        const frontFace = document.createElement("div")
+        frontFace.classList.add("front-face", "face")
+
+        const frontImage = document.createElement("img")
+        frontImage.src = "/img/back.png"
+
+        frontFace.appendChild(frontImage)
+
+        const backFace = document.createElement("div")
+        backFace.classList.add("back-face", "face")
+
+        const backImage = document.createElement("img")
+        backImage.src = duplicatedCards[i]
+
+        backFace.appendChild(backImage)
+
+        card.appendChild(frontFace)
+        card.appendChild(backFace)
+
+        cardContainer.appendChild(card)
+
+        main.appendChild(cardContainer)
+
+        card.addEventListener("click", function(){
+            clickedItem(card)
+        })
     }
 }
   
