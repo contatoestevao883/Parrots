@@ -1,21 +1,14 @@
-let numberOfCards 
-let idInterval
+let numberOfCards;
+let idInterval;
 
-function gameStart(){
-    
-    numberOfCards = Number(prompt('Selecione o número de cartas que deseja jogar?'))
+let rightPlays;
+let time = 0;
 
-    while( invalidNumberOfCards() ){
-        numberOfCards = Number(prompt('Selecione o número de cartas que deseja jogar'))
-    }
+let itemClicked1;
+let itemClicked2;
 
-    idInterval = setInterval(timer, 1000)
-
-}
-
-gameStart()
-
-let rightPlays, time = 0;
+let counter = 0;
+let plays = 0;
 
 const images = [
     '/img/bobrossparrot.gif',
@@ -25,212 +18,286 @@ const images = [
     '/img/revertitparrot.gif',
     '/img/tripletsparrot.gif',
     '/img/unicornparrot.gif'
-]
+];
 
-let arrayOfCards = []
-let duplicatedCards
+let arrayOfCards = [];
+let duplicatedCards = [];
 
-function duplicateCard(){
-    let newArray = numberOfCards / 2
-    for(let i = 0;  i < newArray; i++){
-        arrayOfCards.push(images[i])
+
+// ==============================
+// INÍCIO DO JOGO
+// ==============================
+
+function gameStart() {
+
+    numberOfCards = Number(
+        prompt('Selecione o número de cartas que deseja jogar?')
+    );
+
+    while (invalidNumberOfCards()) {
+        numberOfCards = Number(
+            prompt('Escolha um número válido de cartas: 4, 6, 8, 10 ou 12.')
+        );
     }
-    arrayOfCards.sort(comparador)
-    duplicatedCards = [...arrayOfCards, ...arrayOfCards]
 
+    duplicateCard();
+    generateCards();
+
+    idInterval = setInterval(timer, 1000);
 }
 
-function duplicateCard(){
+gameStart();
 
-    let newArray = numberOfCards / 2
 
-    for(let i = 0; i < newArray; i++){
-        arrayOfCards.push(images[i])
+// ==============================
+// DUPLICAR CARTAS
+// ==============================
+
+function duplicateCard() {
+
+    const numberOfPairs = numberOfCards / 2;
+
+    for (let i = 0; i < numberOfPairs; i++) {
+        arrayOfCards.push(images[i]);
     }
 
-    duplicatedCards = [...arrayOfCards, ...arrayOfCards]
+    duplicatedCards = [...arrayOfCards, ...arrayOfCards];
 
-    duplicatedCards.sort(comparador)
-}   
-
-function comparador() { 
-	return Math.random() - 0.5;
-     
+    // Embaralha TODAS as cartas depois de duplicar
+    shuffle(duplicatedCards);
 }
 
-let itemClicked1
-let itemClicked2 
 
-let counter = 0 
-let plays = 0
+// ==============================
+// SHUFFLE
+// ==============================
 
-function clickedItem(itemClicked){
+function shuffle(array) {
 
-    if(
+    for (let i = array.length - 1; i > 0; i--) {
+
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+
+        [array[i], array[randomIndex]] = [
+            array[randomIndex],
+            array[i]
+        ];
+    }
+}
+
+
+// ==============================
+// GERAR CARTAS COM DOM
+// ==============================
+
+function generateCards() {
+
+    const main = document.querySelector('main');
+
+    for (let i = 0; i < duplicatedCards.length; i++) {
+
+        // Container
+        const cardContainer = document.createElement('div');
+
+        // Card
+        const card = document.createElement('div');
+        card.classList.add('card');
+
+        // Front
+        const frontFace = document.createElement('div');
+        frontFace.classList.add('front-face', 'face');
+
+        const frontImage = document.createElement('img');
+        frontImage.src = '/img/back.png';
+
+        frontFace.appendChild(frontImage);
+
+        // Back
+        const backFace = document.createElement('div');
+        backFace.classList.add('back-face', 'face');
+
+        const backImage = document.createElement('img');
+        backImage.src = duplicatedCards[i];
+
+        backFace.appendChild(backImage);
+
+        // Montando o card
+        card.appendChild(frontFace);
+        card.appendChild(backFace);
+
+        cardContainer.appendChild(card);
+
+        main.appendChild(cardContainer);
+
+        // Evento de clique usando DOM
+        card.addEventListener('click', function () {
+            clickedItem(card);
+        });
+    }
+}
+
+
+// ==============================
+// CLICAR NA CARTA
+// ==============================
+
+function clickedItem(itemClicked) {
+
+    // Impede clicar novamente em uma carta já aberta
+    if (
         itemClicked === itemClicked1 ||
         itemClicked === itemClicked2
-    ){
-        return
+    ) {
+        return;
     }
 
-    if(
-        itemClicked1 !== undefined &&
-        itemClicked2 !== undefined
-    ){
-        return
+    // Impede clicar em uma terceira carta enquanto
+    // as duas anteriores estão sendo analisadas
+    if (itemClicked1 !== undefined && itemClicked2 !== undefined) {
+        return;
     }
 
-    const back = itemClicked.querySelector('.back-face')
-    const front = itemClicked.querySelector('.front-face')
+    const back = itemClicked.querySelector('.back-face');
+    const front = itemClicked.querySelector('.front-face');
 
-    front.classList.add('switch')
-    back.classList.add('switch2')
+    front.classList.add('switch');
+    back.classList.add('switch2');
 
-    plays++
+    plays++;
 
-    if(itemClicked1 === undefined){
+    if (itemClicked1 === undefined) {
 
-        itemClicked1 = itemClicked
+        itemClicked1 = itemClicked;
 
-    }else if(itemClicked2 === undefined){
+    } else {
 
-        itemClicked2 = itemClicked
+        itemClicked2 = itemClicked;
 
-        if(itemClicked1.innerHTML === itemClicked2.innerHTML){
+        if (itemClicked1.innerHTML === itemClicked2.innerHTML) {
 
-            itemClicked1 = undefined
-            itemClicked2 = undefined
+            itemClicked1 = undefined;
+            itemClicked2 = undefined;
 
-            counter += 2
+            counter += 2;
 
-            setTimeout(gameEnd, 500)
+            setTimeout(gameEnd, 500);
 
-        }else{
+        } else {
 
-            setTimeout(flipOver, 1000)
+            setTimeout(flipOver, 1000);
         }
     }
 }
 
-function generateCards(){
 
-    const main = document.querySelector("main")
+// ==============================
+// FINAL DO JOGO
+// ==============================
 
-    for(let i = 0; i < duplicatedCards.length; i++){
+function gameEnd() {
 
-        const cardContainer = document.createElement("div")
+    if (numberOfCards === counter) {
 
-        const card = document.createElement("div")
-        card.classList.add("card")
+        clearInterval(idInterval);
 
-        const frontFace = document.createElement("div")
-        frontFace.classList.add("front-face", "face")
-
-        const frontImage = document.createElement("img")
-        frontImage.src = "/img/back.png"
-
-        frontFace.appendChild(frontImage)
-
-        const backFace = document.createElement("div")
-        backFace.classList.add("back-face", "face")
-
-        const backImage = document.createElement("img")
-        backImage.src = duplicatedCards[i]
-
-        backFace.appendChild(backImage)
-
-        card.appendChild(frontFace)
-        card.appendChild(backFace)
-
-        cardContainer.appendChild(card)
-
-        main.appendChild(cardContainer)
-
-        card.addEventListener("click", function(){
-            clickedItem(card)
-        })
-    }
-}
-  
-function gameEnd(){
-
-    if(numberOfCards == counter){
-
-        clearInterval(idInterval)
-
-        createResultBox()
+        createResultBox();
     }
 }
 
-function createResultBox(){
 
-    const body = document.querySelector("body")
+// ==============================
+// RESULTADO
+// ==============================
 
-    const resultBox = document.createElement("div")
-    resultBox.classList.add("result-box")
+function createResultBox() {
 
-    const title = document.createElement("h2")
-    title.textContent = "Parabéns!"
+    const body = document.querySelector('body');
 
-    const resultTime = document.createElement("p")
-    resultTime.textContent = `Você concluiu o jogo em ${time} segundos!`
+    // Cria o quadrado de resultado
+    const resultBox = document.createElement('div');
+    resultBox.classList.add('result-box');
 
-    const resultPlays = document.createElement("p")
-    resultPlays.textContent = `Número de jogadas: ${plays}`
+    // Título
+    const title = document.createElement('h2');
+    title.textContent = 'Parabéns!';
 
-    const restartButton = document.createElement("button")
-    restartButton.textContent = "Jogar novamente"
+    // Tempo
+    const resultTime = document.createElement('p');
+    resultTime.textContent = `Você concluiu o jogo em ${time} segundos!`;
 
-    restartButton.addEventListener("click", function(){
-        window.location.reload()
-    })
+    // Jogadas
+    const resultPlays = document.createElement('p');
+    resultPlays.textContent = `Número de jogadas: ${plays}`;
 
-    resultBox.appendChild(title)
-    resultBox.appendChild(resultTime)
-    resultBox.appendChild(resultPlays)
-    resultBox.appendChild(restartButton)
+    // Botão
+    const restartButton = document.createElement('button');
+    restartButton.textContent = 'Jogar novamente';
 
-    body.appendChild(resultBox)
+    restartButton.addEventListener('click', function () {
+        window.location.reload();
+    });
+
+    // Montando o resultado
+    resultBox.appendChild(title);
+    resultBox.appendChild(resultTime);
+    resultBox.appendChild(resultPlays);
+    resultBox.appendChild(restartButton);
+
+    body.appendChild(resultBox);
 }
 
-function flipOver(){    
 
-    const back = itemClicked1.querySelector('.back-face')
-    const front = itemClicked2.querySelector('.front-face')
+// ==============================
+// VIRAR CARTAS DE VOLTA
+// ==============================
 
-    
-    const back2 = itemClicked2.querySelector('.back-face')
-    const front1 = itemClicked1.querySelector('.front-face')
-    
-    front.classList.remove("switch")
-    back.classList.remove("switch2")
-    
-    front1.classList.remove("switch")
-    back2.classList.remove("switch2")
+function flipOver() {
 
-    itemClicked1 = undefined
-    itemClicked2 = undefined
+    const back1 = itemClicked1.querySelector('.back-face');
+    const front1 = itemClicked1.querySelector('.front-face');
+
+    const back2 = itemClicked2.querySelector('.back-face');
+    const front2 = itemClicked2.querySelector('.front-face');
+
+    front1.classList.remove('switch');
+    back1.classList.remove('switch2');
+
+    front2.classList.remove('switch');
+    back2.classList.remove('switch2');
+
+    itemClicked1 = undefined;
+    itemClicked2 = undefined;
 }
 
-function invalidNumberOfCards(){
-    
+
+// ==============================
+// VALIDAR NÚMERO DE CARTAS
+// ==============================
+
+function invalidNumberOfCards() {
+
     if (
-        numberOfCards % 2 === 1 ||
+        isNaN(numberOfCards) ||
         numberOfCards < 4 ||
         numberOfCards > 12 ||
-        isNaN(numberOfCards)
-    ){
+        numberOfCards % 2 !== 0
+    ) {
         return true;
     }
 
     return false;
 }
 
-function timer(){
-    const watch = document.querySelector('.watch')
-    
-    time++
-    
-    watch.innerHTML = time
-    
+
+// ==============================
+// TIMER
+// ==============================
+
+function timer() {
+
+    const watch = document.querySelector('.watch');
+
+    time++;
+
+    watch.textContent = time;
 }
