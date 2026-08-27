@@ -65,27 +65,49 @@ let counter = 0
 let plays = 0
 
 function clickedItem(itemClicked){
+
+    if(
+        itemClicked === itemClicked1 ||
+        itemClicked === itemClicked2
+    ){
+        return
+    }
+
+    if(
+        itemClicked1 !== undefined &&
+        itemClicked2 !== undefined
+    ){
+        return
+    }
+
     const back = itemClicked.querySelector('.back-face')
     const front = itemClicked.querySelector('.front-face')
-    
+
     front.classList.add('switch')
     back.classList.add('switch2')
 
     plays++
-    
-     if(itemClicked1 === undefined){
+
+    if(itemClicked1 === undefined){
+
         itemClicked1 = itemClicked
-     }else if(itemClicked2 === undefined){
-            itemClicked2 = itemClicked
+
+    }else if(itemClicked2 === undefined){
+
+        itemClicked2 = itemClicked
 
         if(itemClicked1.innerHTML === itemClicked2.innerHTML){
+
             itemClicked1 = undefined
             itemClicked2 = undefined
-            counter+= 2 
-            setTimeout(gameEnd, 500)
-        }else{
-            setTimeout(flipOver, 1000)
 
+            counter += 2
+
+            setTimeout(gameEnd, 500)
+
+        }else{
+
+            setTimeout(flipOver, 1000)
         }
     }
 }
@@ -132,19 +154,43 @@ function generateCards(){
   
 function gameEnd(){
 
-    if(numberOfCards == counter) {
-    
-        clearInterval(idInterval);
+    if(numberOfCards == counter){
 
-        alert(`Você ganhou em ${plays} jogadas! A duração do jogo foi de ${time} segundos!`);
+        clearInterval(idInterval)
 
-        const end = confirm('Gostaria de jogar novamente?');
+        createResultBox()
+    }
+}
 
-        if ( end === true){
-            window.location.reload(true);
-        }
-    }   
-    
+function createResultBox(){
+
+    const body = document.querySelector("body")
+
+    const resultBox = document.createElement("div")
+    resultBox.classList.add("result-box")
+
+    const title = document.createElement("h2")
+    title.textContent = "Parabéns!"
+
+    const resultTime = document.createElement("p")
+    resultTime.textContent = `Você concluiu o jogo em ${time} segundos!`
+
+    const resultPlays = document.createElement("p")
+    resultPlays.textContent = `Número de jogadas: ${plays}`
+
+    const restartButton = document.createElement("button")
+    restartButton.textContent = "Jogar novamente"
+
+    restartButton.addEventListener("click", function(){
+        window.location.reload()
+    })
+
+    resultBox.appendChild(title)
+    resultBox.appendChild(resultTime)
+    resultBox.appendChild(resultPlays)
+    resultBox.appendChild(restartButton)
+
+    body.appendChild(resultBox)
 }
 
 function flipOver(){    
