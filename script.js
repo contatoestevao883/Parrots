@@ -23,10 +23,7 @@ const images = [
 let arrayOfCards = [];
 let duplicatedCards = [];
 
-
-// ==============================
 // INÍCIO DO JOGO
-// ==============================
 
 function gameStart() {
 
@@ -48,10 +45,7 @@ function gameStart() {
 
 gameStart();
 
-
-// ==============================
 // DUPLICAR CARTAS
-// ==============================
 
 function duplicateCard() {
 
@@ -67,10 +61,7 @@ function duplicateCard() {
     shuffle(duplicatedCards);
 }
 
-
-// ==============================
 // SHUFFLE
-// ==============================
 
 function shuffle(array) {
 
@@ -85,10 +76,7 @@ function shuffle(array) {
     }
 }
 
-
-// ==============================
 // GERAR CARTAS COM DOM
-// ==============================
 
 function generateCards() {
 
@@ -136,10 +124,7 @@ function generateCards() {
     }
 }
 
-
-// ==============================
 // CLICAR NA CARTA
-// ==============================
 
 function clickedItem(itemClicked) {
 
@@ -189,10 +174,7 @@ function clickedItem(itemClicked) {
     }
 }
 
-
-// ==============================
 // FINAL DO JOGO
-// ==============================
 
 function gameEnd() {
 
@@ -204,10 +186,7 @@ function gameEnd() {
     }
 }
 
-
-// ==============================
 // RESULTADO
-// ==============================
 
 function createResultBox() {
 
@@ -246,10 +225,7 @@ function createResultBox() {
     body.appendChild(resultBox);
 }
 
-
-// ==============================
 // VIRAR CARTAS DE VOLTA
-// ==============================
 
 function flipOver() {
 
@@ -269,10 +245,7 @@ function flipOver() {
     itemClicked2 = undefined;
 }
 
-
-// ==============================
 // VALIDAR NÚMERO DE CARTAS
-// ==============================
 
 function invalidNumberOfCards() {
 
@@ -289,9 +262,7 @@ function invalidNumberOfCards() {
 }
 
 
-// ==============================
 // TIMER
-// ==============================
 
 function timer() {
 
