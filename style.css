@@ -106,4 +106,59 @@ img{
     position: fixed;
     transition: all 1s linear;
   }
+
+    .result-box {
+    margin-top: 30px;
+    margin-bottom: 50px;
+
+    width: 350px;
+    min-height: 180px;
+
+    background-color: #A7E9AF;
+
+    border-radius: 15px;
+
+    box-shadow: 2px 2px 8px rgba(0,0,0,.2);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    font-family: 'Roboto';
+}
+
+.result-box h2 {
+    color: #75B79E;
+    font-size: 30px;
+    margin: 10px;
+}
+
+.result-box p {
+    font-size: 18px;
+    margin: 5px;
+}
+
+.result-box button {
+    margin-top: 15px;
+
+    padding: 10px 20px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: #75B79E;
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+.result-box button:hover {
+    opacity: 0.8;
+}
   
